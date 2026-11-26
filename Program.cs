@@ -7,6 +7,7 @@ using SecurityPRO.ERP.Web.Services;
 using System.Text;
 using QuestPDF.Drawing;
 using QuestPDF.Infrastructure;
+using QuestPDF.Fluent;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuración de QuestPDF
