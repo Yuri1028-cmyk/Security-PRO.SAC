@@ -5,8 +5,23 @@ using SecurityPRO.ERP.Web.Middleware;
 using SecurityPRO.ERP.Web.Repositories;
 using SecurityPRO.ERP.Web.Services;
 using System.Text;
+using QuestPDF.Drawing;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+// Configuración de QuestPDF
+Settings.License = LicenseType.Community;
+
+var fontPath = Path.Combine(
+    builder.Environment.ContentRootPath,
+    "Fonts",
+    "DejaVuSans.ttf"
+);
+
+using (var fontStream = File.OpenRead(fontPath))
+{
+    FontManager.RegisterFont(fontStream);
+}
 
 builder.WebHost.ConfigureKestrel(options =>
 {
