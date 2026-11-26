@@ -11,7 +11,7 @@ using QuestPDF.Fluent;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuración de QuestPDF
-Settings.License = LicenseType.Community;
+
 
 var fontPath = Path.Combine(
     builder.Environment.ContentRootPath,
