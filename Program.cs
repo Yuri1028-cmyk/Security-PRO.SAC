@@ -13,14 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Configuración de QuestPDF
 
 
-var fontPath = Path.Combine(
-    builder.Environment.ContentRootPath,
-    "Fonts",
-    "DejaVuSans.ttf"
-);
-
-using (var fontStream = File.OpenRead(fontPath))
+// Registrar todas las fuentes incluidas en el despliegue (Lato y DejaVu Sans).
+var fontsDirectory = Path.Combine(builder.Environment.ContentRootPath, "Fonts");
+foreach (var fontFile in Directory.GetFiles(fontsDirectory, "*.ttf"))
 {
+    using var fontStream = File.OpenRead(fontFile);
     FontManager.RegisterFont(fontStream);
 }
 
