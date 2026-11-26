@@ -1689,7 +1689,7 @@ async function renderFacturas() {
   try {
     const data = await apiCall("/facturas");
     document.getElementById("factTable").innerHTML = `
-      <table><thead><tr><th>Serie-Número</th><th>Cliente</th><th>Fecha</th><th>Subtotal</th><th>IGV</th><th>Total</th><th>Estado SUNAT</th></tr></thead>
+      <table><thead><tr><th>Serie-Número</th><th>Cliente</th><th>Fecha</th><th>Subtotal</th><th>IGV</th><th>Total</th><th>Estado SUNAT</th><th>PDF</th></tr></thead>
       <tbody>${
         data
           .map(
@@ -1701,10 +1701,33 @@ async function renderFacturas() {
         <td>${formatMoney(f.igv)}</td>
         <td><strong>${formatMoney(f.total)}</strong></td>
         <td><span class="badge ${estadoBadge(f.estadoSunat)}">${escapeHtml(f.estadoSunat)}</span></td>
+        <td><button class="btn-secondary btn-sm" onclick="pdfFactura(${f.idFactura})">📄 PDF</button></td>
       </tr>`,
           )
-          .join("") || '<tr><td colspan="7">Sin facturas emitidas</td></tr>'
+          .join("") || '<tr><td colspan="8">Sin facturas emitidas</td></tr>'
       }</tbody></table>`;
+  } catch (e) {
+    showToast(e.message, "error");
+  }
+}
+
+// Descargar factura PDF usando el endpoint existente y el token de sesión.
+async function pdfFactura(id) {
+  try {
+    const res = await fetch(`${API}/facturas/${id}/pdf`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    if (!res.ok) throw new Error(`No se pudo generar el PDF (HTTP ${res.status})`);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Factura_${id}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
   } catch (e) {
     showToast(e.message, "error");
   }
