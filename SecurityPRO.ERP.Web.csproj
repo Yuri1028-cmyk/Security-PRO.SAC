@@ -20,5 +20,10 @@
     <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
+<ItemGroup>
+  <Content Include="Fonts\*.ttf"
+           CopyToOutputDirectory="PreserveNewest"
+           CopyToPublishDirectory="Always" />
+</ItemGroup>
 
 </Project>
